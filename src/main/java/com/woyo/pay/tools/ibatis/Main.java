@@ -12,7 +12,6 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.springframework.util.StringUtils;
 
@@ -156,7 +155,8 @@ public class Main {
 		javaBeanModel.put("description", table.getTableName());
 		javaBeanModel.put("className", className);
 
-		configModel.put("namespace", className.toLowerCase());
+//		configModel.put("namespace", className.toLowerCase());
+		configModel.put("namespace", packageName.replace("domain", "dao") + ".I" + className +"Mapper");
 		configModel.put("classFullName", packageName + "." + className);
 		configModel.put("className", className);
 		configModel.put("tableName", table.getTableName().toUpperCase());

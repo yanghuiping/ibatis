@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
-<sqlMap namespace="${namespace}">
-	<typeAlias alias="${className?uncap_first}" type="${classFullName}"/>
-    <resultMap id="${className?uncap_first}" class="${classFullName}">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${namespace}">
+    <resultMap id="${className?uncap_first}" type="${classFullName}">
     <#list fields?keys as key >
         <result column="${fields[key]}" property="${key}" jdbcType="${jdbctype[key]}"/>
     </#list>
@@ -17,7 +17,7 @@
             <#if !key_has_next>${"\n"}</#if><#t/>
         </#list>
     </sql>
-    <insert id="create" parameterClass="${className?uncap_first}">
+    <insert id="create" parameterType="${className}">
         <#if sqlStatement?exists>
         <selectKey resultClass="java.lang.Long" keyProperty="sequenceId">
             ${sqlStatement?upper_case} 
@@ -52,9 +52,11 @@
             ${values})
     </insert>
 
-    <update id="update" parameterClass="${className?uncap_first}">
-        UPDATE ${tableName}
-        <dynamic prepend="SET"> 
+    <update id="update" parameterType="${className}">
+        UPDATE ${tableName} SET
+        <if test="id != null">
+            ID = #id#
+        </if>
         <#list fields?keys as key >
             <#assign flag="true"/>
             <#list primaryKey as pk>
@@ -63,12 +65,11 @@
             </#if>
             </#list>
             <#if flag=="true">
-        <isNotNull prepend="," property="${key}">
-            ${fields[key]} = #${key}#
-        </isNotNull>
+        <if test="${key} != null">
+            ,${fields[key]} = #${key}#
+        </if>
             </#if> 
         </#list>
-        </dynamic>
 		WHERE
         <#list fields?keys as key >
             <#list primaryKey as pk>
@@ -80,7 +81,7 @@
     </update>
     
     <#if primaryKey?size == 1>
-    <delete id="deleteByPrimaryKey" parameterClass="java.lang.Long">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         DELETE FROM ${tableName} 
 		WHERE
         <#list fields?keys as key >
@@ -95,7 +96,7 @@
 
     <#if primaryKey?size == 1>
     <select id="findById" resultMap="${className?uncap_first}"
-        parameterClass="java.lang.Long">
+        parameterType="java.lang.Long">
         SELECT 
         <#list fields?keys as key >
             <#if (key_index) == 0>${"\t\t\t"}</#if><#t/>
@@ -123,24 +124,20 @@
             <#if (key_index+1) % 5 == 0>${"\n\t\t\t"}</#if><#t/>
             <#if !key_has_next>${"\n"}</#if><#t/>
         </#list>
-        FROM ${tableName}
-        <dynamic prepend="WHERE"> 
+        FROM ${tableName} WHERE 1 = 1
         <#list fields?keys as key >
-        <isNotNull prepend="AND" property="${key}">
-            ${fields[key]} = #${key}# 
-        </isNotNull>
+        <if test="${key} != null">
+           and ${fields[key]} = #${key}#
+        </if>
         </#list>
-        </dynamic>
     </select>
 
-    <select id="findBySelective_COUNT"  resultClass="java.lang.Integer">
-        SELECT count(*) FROM ${tableName}
-        <dynamic prepend="WHERE">
+    <select id="findBySelective_COUNT"  resultType="java.lang.Integer">
+        SELECT count(*) FROM ${tableName} WHERE 1 = 1
         <#list fields?keys as key >
-        <isNotNull prepend="AND" property="${key}">
-            ${fields[key]} = #${key}# 
-        </isNotNull>
+        <if test="${key} != null">
+           and ${fields[key]} = #${key}#
+        </if>
         </#list>
-        </dynamic>
     </select>
-</sqlMap>
+</mapper>

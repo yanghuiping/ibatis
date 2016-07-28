@@ -10,7 +10,7 @@
 			password="123456">
 		</jdbc-connection>
 		
-		<java-model-generator targetPackage="com.xcm.open.core.model"
+		<java-model-generator targetPackage="com.yc.easy.trade.domain.purchase"
 			targetProject="target/generated-sources/main/src">
 		</java-model-generator>
 		
@@ -23,23 +23,7 @@
 		</dao-generator>
 		
 		<table tableName="purchase_contract" primaryKey="ID" />
-		<!-- <table tableName="OPEN_ADVERTIS" primaryKey="ID" />
-		<table tableName="OPEN_ADVERTIS_APPLICATION" primaryKey="ID" />
-		<table tableName="OPEN_APP_INFORMATION" primaryKey="ID" />
-		<table tableName="OPEN_CHANNEL" primaryKey="ID" /> 
-		<table tableName="OPEN_CHANNEL_DETAIL" primaryKey="ID" />-->
-		<!-- <table tableName="OPEN_CONTRACT" primaryKey="ID" />
-		<table tableName="OPEN_LANDING_PAGE" primaryKey="ID" />
-		<table tableName="OPEN_RULES" primaryKey="ID" /> -->
-		<!-- <table tableName="OPEN_RULES_CPA" primaryKey="ID" />
-		<table tableName="OPEN_MQMSG" primaryKey="ID" /> -->
-		<!-- <table tableName="OPEN_RULES_CPS" primaryKey="ID" /> -->
-		<!-- <table tableName="OPEN_SPREAD_KEYWORD" primaryKey="ID" /> -->
-		<!-- <table tableName="OPEN_SPREAD_PLAN" primaryKey="ID" />
-		<table tableName="OPEN_SPREAD_UNIT" primaryKey="ID" />
-		<table tableName="OPEN_USER_BELONG" primaryKey="ID" />
-		<table tableName="OPEN_USER_TRADE" primaryKey="ID" />
-		<table tableName="OPEN_SERIALNO" primaryKey="ID" /> -->
+		<table tableName="purchase_product" primaryKey="ID" />
 		
 	</context>
 </config>
