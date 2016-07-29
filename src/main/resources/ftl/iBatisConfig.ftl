@@ -37,7 +37,7 @@
             </#if>
             </#list>
             <#if flag="true">
-                <#assign values=values+"#"+key+"#"/><#t/>
+                <#assign values=values+"# {"+key+"}"/><#t/>
             <#else>
                 <#assign values=values+"#sequenceId#"/><#t/>
             </#if>
@@ -50,12 +50,15 @@
         )
         VALUES(
             ${values})
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID() AS VALUE
+		</selectKey>
     </insert>
 
     <update id="update" parameterType="${className}">
         UPDATE ${tableName} SET
         <if test="id != null">
-            ID = #id#
+            ID = # {id}
         </if>
         <#list fields?keys as key >
             <#assign flag="true"/>
@@ -66,7 +69,7 @@
             </#list>
             <#if flag=="true">
         <if test="${key} != null">
-            ,${fields[key]} = #${key}#
+            ,${fields[key]} = # {${key}}
         </if>
             </#if> 
         </#list>
@@ -74,7 +77,7 @@
         <#list fields?keys as key >
             <#list primaryKey as pk>
             <#if fields[key] == pk>
-            ${fields[key]} = #${key}# 
+            ${fields[key]} = # {${key}} 
             </#if>
             </#list>
         </#list>
@@ -87,7 +90,7 @@
         <#list fields?keys as key >
             <#list primaryKey as pk>
             <#if fields[key] == pk>
-            ${fields[key]} = #${key}# 
+            ${fields[key]} = # {${key}} 
             </#if>
             </#list>
         </#list>
@@ -109,7 +112,7 @@
         <#list fields?keys as key >
             <#list primaryKey as pk>
             <#if fields[key] == pk>
-            ${fields[key]} = #${key}# 
+            ${fields[key]} = # {${key}} 
             </#if>
             </#list>
         </#list>
@@ -127,7 +130,7 @@
         FROM ${tableName} WHERE 1 = 1
         <#list fields?keys as key >
         <if test="${key} != null">
-           and ${fields[key]} = #${key}#
+           and ${fields[key]} = # {${key}}
         </if>
         </#list>
     </select>
@@ -136,7 +139,7 @@
         SELECT count(*) FROM ${tableName} WHERE 1 = 1
         <#list fields?keys as key >
         <if test="${key} != null">
-           and ${fields[key]} = #${key}#
+           and ${fields[key]} = # {${key}}
         </if>
         </#list>
     </select>
