@@ -17,7 +17,7 @@
             <#if !key_has_next>${"\n"}</#if><#t/>
         </#list>
     </sql>
-    <insert id="create" parameterType="${className}">
+    <insert id="create" useGeneratedKeys="true" keyProperty="id" parameterType="${className}">
         <#if sqlStatement?exists>
         <selectKey resultClass="java.lang.Long" keyProperty="sequenceId">
             ${sqlStatement?upper_case} 
@@ -50,9 +50,6 @@
         )
         VALUES(
             ${values})
-        <selectKey resultType="int" keyProperty="id" order="AFTER">
-			SELECT LAST_INSERT_ID() AS VALUE
-		</selectKey>
     </insert>
 
     <update id="update" parameterType="${className}">
